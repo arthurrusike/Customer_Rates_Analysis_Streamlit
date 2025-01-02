@@ -8,7 +8,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from customer_profitability import sub_category_classification
 
-import customer_profitability
 
 
 @st.cache_data
@@ -561,6 +560,6 @@ if uploaded_file:
 
                     st.dataframe(selected_cost_Centre_financials)
 
-        with AboutTab:
-            st.markdown(f'Check in with Arthur Rusike')
-            st.markdown(f'For AU Commercial Finance Internal Use only')
+    with AboutTab:
+        st.markdown(f'Check in with Arthur Rusike')
+        st.markdown(f'For AU Commercial Finance Internal Use only')
