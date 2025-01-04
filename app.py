@@ -65,7 +65,7 @@ if uploaded_file:
 
     DetailsTab, SiteTab, ProfitabilityTab, AboutTab = st.tabs(["📊 Quick View", "🥇 Site View",
                                                                "📈 Estimate Profitability",
-                                                               "ℹ️ About Owner "])
+                                                               "ℹ️ About"])
 
     ###############################  Details Tab ###############################
     with DetailsTab:
