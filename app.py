@@ -2,8 +2,8 @@ import locale
 import random
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
+import plotly.express as px
 import streamlit as st
 
 from customer_profitability import load_invoices_model, profitability_model
