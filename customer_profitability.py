@@ -1,3 +1,7 @@
+import streamlit as st
+import pandas as pd
+
+
 def sub_category_classification(dtframe):
     Storage_Revenue = ['Storage - Initial', 'Storage - Renewal', 'Storage Guarantee']
     Handling_Revenue = ['Handling - Initial', 'Handling Out']
@@ -23,3 +27,25 @@ def sub_category_classification(dtframe):
         return "Other Warehouse Revenue"
     else:
         return dtframe["Revenue_Category"]
+
+
+@st.cache_data
+def load_invoices_model(uploaded_file):
+    invoice_rates = pd.read_excel(uploaded_file, sheet_name="InvoiceRates")
+    invoice_rates["Calumo Description"] = invoice_rates.apply(sub_category_classification, axis=1)
+    invoice_rates['formatted_date'] = pd.to_datetime(invoice_rates['InvoiceDate'])
+    invoice_rates.formatted_date = invoice_rates.formatted_date.dt.strftime('%d-%m-%Y')
+    invoice_rates.sort_values("InvoiceNumber", inplace=True)
+    return invoice_rates
+
+
+@st.cache_data
+def profitability_model(uploaded_file):
+    AU_facility_financials = pd.read_excel(uploaded_file,
+                                           sheet_name="Facility Financials",
+                                           header=3,
+                                           usecols="A:EL")
+
+    return AU_facility_financials
+
+
