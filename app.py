@@ -1,11 +1,11 @@
 import locale
 import random
-import pandas as pd
 import numpy as np
-import openpyxl
-import streamlit as st
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit as st
+
 from customer_profitability import load_invoices_model, profitability_model
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
@@ -19,7 +19,7 @@ with st.spinner('Loading and Updating Report...🥱'):
     try:
         with st.sidebar:
             st.title("Analytics Dashboard")
-            uploaded_file = st.file_uploader('Upload Customer Rates File', type=['xlsx', 'xlsm','xlsb'])
+            uploaded_file = st.file_uploader('Upload Customer Rates File', type=['xlsx', 'xlsm', 'xlsb'])
             # Main Dashboard
             invoice_rates = load_invoices_model(uploaded_file)
             st.divider()
@@ -424,7 +424,6 @@ if uploaded_file:
         #
         # st.plotly_chart(fig)
 
-
         #### Plotting HEAT MAP - tow Show Revenue and Profitabiliy #########################################
 
         st.markdown('##### Avg Recurring Pallet Storage Billed')
@@ -458,7 +457,6 @@ if uploaded_file:
     try:
         with ProfitabilityTab:
 
-
             AU_facility_financials = profitability_model(profitability_model_file)
             selected_cost_Centre_financials = AU_facility_financials[
                 AU_facility_financials["CC Long #"] == selected_cost_centre[0:9]]
@@ -469,10 +467,12 @@ if uploaded_file:
             operating_expenses = selected_cost_Centre_financials["Total Operating Expenses"]
 
             selected_customer_pivot_profitability = pd.pivot_table(selected_customer,
-                                                     values=["LineAmount"],
-                                                     index=["Calumo Description"],
-                                                     aggfunc="sum")
-            selected_customer_pivot_profitability["% Share"] = [f"{i / (selected_customer["LineAmount"].sum()):.1%}" for i in selected_customer_pivot_profitability["LineAmount"]]
+                                                                   values=["LineAmount"],
+                                                                   index=["Calumo Description"],
+                                                                   aggfunc="sum")
+            selected_customer_pivot_profitability["% Share"] = [f"{i / (selected_customer["LineAmount"].sum()):.1%}" for
+                                                                i in
+                                                                selected_customer_pivot_profitability["LineAmount"]]
 
             selected_customer_pivot_profitability = selected_customer_pivot_profitability.style.format(
                 {'LineAmount': lambda x: locale.format_string('%.0f', x, grouping=True)})
@@ -483,60 +483,59 @@ if uploaded_file:
                 st.write(f""" ##### {select_customer}  Revenues """)
                 st.dataframe(selected_customer_pivot_profitability)
 
-
-                    # st.write(""" #####   Labour & Benefits """)
-                    # exp = st.expander(f"Total Labour and Benefits............:\t {list(total_labour)[0]:,.0f}")
-                    # total_labour_dataframe = selected_cost_Centre_financials[
-                    #     selected_cost_Centre_financials.columns[22:47]].T
-                    # total_labour_dataframe = total_labour_dataframe.reset_index()
-                    # total_labour_dataframe = total_labour_dataframe.rename(
-                    #     columns={"index": "Revenue Categories", selected_cost_centre_row_number: "Amount"})
-                    # total_labour_dataframe["Allocation"] = total_labour_dataframe.apply(sub_cost_allocation, axis=1)
-                    # total_labour_dataframe = total_labour_dataframe[total_labour_dataframe["Amount"] > 0]
-                    # total_labour_dataframe = total_labour_dataframe.style.format(
-                    #     {'Amount': lambda x: locale.format_string('%.0f', x, grouping=True)})
-                    # exp.dataframe(total_labour_dataframe, hide_index=True)
-                    #
-                    # st.write(""" #####   Operating Expenses """)
-                    # exp = st.expander(f"Operating Expenses.....................: \t {list(operating_expenses)[0]:,.0f}")
-                    # operating_expenses_dataframe = selected_cost_Centre_financials[
-                    #     selected_cost_Centre_financials.columns[47:71]].T
-                    # operating_expenses_dataframe.reset_index(inplace=True)
-                    # operating_expenses_dataframe.rename(
-                    #     columns={"index": "Revenue Categories", selected_cost_centre_row_number: "Amount"},
-                    #     inplace=True)
-                    # operating_expenses_dataframe["Allocation"] = operating_expenses_dataframe.apply(sub_cost_allocation, axis=1)
-                    # operating_expenses_dataframe = operating_expenses_dataframe[operating_expenses_dataframe.Amount > 0]
-                    # operating_expenses_dataframe = operating_expenses_dataframe.style.format(
-                    #     {'Amount': lambda x: locale.format_string('%.0f', x, grouping=True)})
-                    #
-                    #
-                    # exp.dataframe(operating_expenses_dataframe, hide_index=True)
-                    #
-                    # ebitda_details1, ebitda_details2, ebitda_details3, ebitda_details4, = st.columns(4)
-                    #
-                    # site_capacity = list(selected_cost_Centre_financials["Total Pallet Capacity"])[0]
-                    # site_sqm = list(selected_cost_Centre_financials["Square Meters"])[0]
-                    # total_expenses = list(selected_cost_Centre_financials["Total Expenses"])[0]
-                    # ebitdar_amount = list(selected_cost_Centre_financials["EBITDAR"])[0]
-                    # rent_amount = list(selected_cost_Centre_financials["700100:Rent Expense (Real Estate)"])[0]
-                    # ebitda_amount = ebitdar_amount - rent_amount
-                    #
-                    # ebitda_details1.text(
-                    #     f"Total Expenses :\n {locale.format_string("%.0f", total_expenses, grouping=True)}")
-                    # ebitda_details2.text(f"EBITDAR :\n {locale.format_string("%.0f", ebitdar_amount, grouping=True)}")
-                    # ebitda_details3.text(f"RENT :\n {locale.format_string("%.0f", rent_amount, grouping=True)}")
-                    # ebitda_details4.text(f"EBITDA :\n {locale.format_string("%.0f", ebitda_amount, grouping=True)}")
-                    #
-                    # st.divider()
-                    #
-                    # stats1, stats2, stats3 = st.columns(3)
-                    #
-                    # stats1.text(f"Site SQM: \n {locale.format_string("%.0f", site_sqm, grouping=True)}")
-                    # stats2.text(f"EBITDAR/m²: \n {locale.format_string("%.0f", (ebitdar_amount/site_sqm), grouping=True)}")
-                    # stats3.text(f"Rev/m²: \n {locale.format_string("%.0f", ( revenue_amount[selected_cost_centre_row_number]/site_sqm), grouping=True)}")
-                    # stats4.text(f"EBITDA/m²: \n {locale.format_string("%.0f",
-                    #                                                        ( ebitda_amount/site_sqm), grouping=True)}")
+                # st.write(""" #####   Labour & Benefits """)
+                # exp = st.expander(f"Total Labour and Benefits............:\t {list(total_labour)[0]:,.0f}")
+                # total_labour_dataframe = selected_cost_Centre_financials[
+                #     selected_cost_Centre_financials.columns[22:47]].T
+                # total_labour_dataframe = total_labour_dataframe.reset_index()
+                # total_labour_dataframe = total_labour_dataframe.rename(
+                #     columns={"index": "Revenue Categories", selected_cost_centre_row_number: "Amount"})
+                # total_labour_dataframe["Allocation"] = total_labour_dataframe.apply(sub_cost_allocation, axis=1)
+                # total_labour_dataframe = total_labour_dataframe[total_labour_dataframe["Amount"] > 0]
+                # total_labour_dataframe = total_labour_dataframe.style.format(
+                #     {'Amount': lambda x: locale.format_string('%.0f', x, grouping=True)})
+                # exp.dataframe(total_labour_dataframe, hide_index=True)
+                #
+                # st.write(""" #####   Operating Expenses """)
+                # exp = st.expander(f"Operating Expenses.....................: \t {list(operating_expenses)[0]:,.0f}")
+                # operating_expenses_dataframe = selected_cost_Centre_financials[
+                #     selected_cost_Centre_financials.columns[47:71]].T
+                # operating_expenses_dataframe.reset_index(inplace=True)
+                # operating_expenses_dataframe.rename(
+                #     columns={"index": "Revenue Categories", selected_cost_centre_row_number: "Amount"},
+                #     inplace=True)
+                # operating_expenses_dataframe["Allocation"] = operating_expenses_dataframe.apply(sub_cost_allocation, axis=1)
+                # operating_expenses_dataframe = operating_expenses_dataframe[operating_expenses_dataframe.Amount > 0]
+                # operating_expenses_dataframe = operating_expenses_dataframe.style.format(
+                #     {'Amount': lambda x: locale.format_string('%.0f', x, grouping=True)})
+                #
+                #
+                # exp.dataframe(operating_expenses_dataframe, hide_index=True)
+                #
+                # ebitda_details1, ebitda_details2, ebitda_details3, ebitda_details4, = st.columns(4)
+                #
+                # site_capacity = list(selected_cost_Centre_financials["Total Pallet Capacity"])[0]
+                # site_sqm = list(selected_cost_Centre_financials["Square Meters"])[0]
+                # total_expenses = list(selected_cost_Centre_financials["Total Expenses"])[0]
+                # ebitdar_amount = list(selected_cost_Centre_financials["EBITDAR"])[0]
+                # rent_amount = list(selected_cost_Centre_financials["700100:Rent Expense (Real Estate)"])[0]
+                # ebitda_amount = ebitdar_amount - rent_amount
+                #
+                # ebitda_details1.text(
+                #     f"Total Expenses :\n {locale.format_string("%.0f", total_expenses, grouping=True)}")
+                # ebitda_details2.text(f"EBITDAR :\n {locale.format_string("%.0f", ebitdar_amount, grouping=True)}")
+                # ebitda_details3.text(f"RENT :\n {locale.format_string("%.0f", rent_amount, grouping=True)}")
+                # ebitda_details4.text(f"EBITDA :\n {locale.format_string("%.0f", ebitda_amount, grouping=True)}")
+                #
+                # st.divider()
+                #
+                # stats1, stats2, stats3 = st.columns(3)
+                #
+                # stats1.text(f"Site SQM: \n {locale.format_string("%.0f", site_sqm, grouping=True)}")
+                # stats2.text(f"EBITDAR/m²: \n {locale.format_string("%.0f", (ebitdar_amount/site_sqm), grouping=True)}")
+                # stats3.text(f"Rev/m²: \n {locale.format_string("%.0f", ( revenue_amount[selected_cost_centre_row_number]/site_sqm), grouping=True)}")
+                # stats4.text(f"EBITDA/m²: \n {locale.format_string("%.0f",
+                #                                                        ( ebitda_amount/site_sqm), grouping=True)}")
 
             with prof2:
                 revenue_lines = selected_cost_Centre_financials[selected_cost_Centre_financials.columns[3:22]].T
@@ -545,7 +544,8 @@ if uploaded_file:
                     columns={"index": "Revenue Categories", selected_cost_centre_row_number: "Amount"},
                     inplace=True)
                 revenue_lines = revenue_lines[revenue_lines.Amount > 0]
-                revenue_lines["% Share"] =  [f"{i / revenue_amount[selected_cost_centre_row_number]:.1%}" for i in revenue_lines["Amount"]]
+                revenue_lines["% Share"] = [f"{i / revenue_amount[selected_cost_centre_row_number]:.1%}" for i in
+                                            revenue_lines["Amount"]]
                 revenue_lines = revenue_lines.style.format(
                     {'Amount': lambda x: locale.format_string('%.0f', x, grouping=True)})
 
@@ -598,13 +598,14 @@ if uploaded_file:
                 stats1, stats2, stats3, stats4 = st.columns(4)
 
                 stats1.text(f"Site SQM: \n {locale.format_string("%.0f", site_sqm, grouping=True)}")
-                stats2.text(f"EBITDAR/m²: \n {locale.format_string("%.0f", (ebitdar_amount/site_sqm), grouping=True)}")
-                stats3.text(f"Rev/m²: \n {locale.format_string("%.0f", ( revenue_amount[selected_cost_centre_row_number]/site_sqm), grouping=True)}")
+                stats2.text(
+                    f"EBITDAR/m²: \n {locale.format_string("%.0f", (ebitdar_amount / site_sqm), grouping=True)}")
+                stats3.text(
+                    f"Rev/m²: \n {locale.format_string("%.0f", (revenue_amount[selected_cost_centre_row_number] / site_sqm), grouping=True)}")
                 stats4.text(f"EBITDA/m²: \n {locale.format_string("%.0f",
-                                                                   ( ebitda_amount/site_sqm), grouping=True)}")
+                                                                  (ebitda_amount / site_sqm), grouping=True)}")
     except Exception as e:
         st.markdown("###### Please Check if Customer Pricing Model has been Uploaded")
 
     with AboutTab:
         st.markdown(f'Check in with Arthur Rusike')
-
