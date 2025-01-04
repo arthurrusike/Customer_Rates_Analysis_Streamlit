@@ -209,7 +209,7 @@ if uploaded_file:
                 name="Storage Rate",
             ))
 
-            # Add annotations for each data point
+            # Add annotations for each data point. to recheck
             for i, (val, customer) in enumerate(zip(y, customer_names)):
                 fig.add_annotation(
                     y=val,
