@@ -42,7 +42,7 @@ with st.spinner('Loading and Updating Report...🥱'):
         st.subheader('Upload Customer Rates File to use with this App 📊 ')
         print(e)
 
-###############################  Main Dashboard ###############################
+###############################  Main Dashboard ##############################
 
 if uploaded_file:
     cost_centres = invoice_rates[invoice_rates.Cost_Center.str.contains("S&H", na=False)]
@@ -67,7 +67,7 @@ if uploaded_file:
 
     DetailsTab, SiteTab, ProfitabilityTab, AboutTab = st.tabs(["📊 Quick View", "🥇 Site View",
                                                                "📈 Estimate Profitability",
-                                                               "ℹ️ About"])
+                                                               "ℹ️ About Owner "])
 
     ###############################  Details Tab ###############################
     with DetailsTab:
@@ -175,7 +175,7 @@ if uploaded_file:
 
         ###############################  Box Plots Over and under Indexed Customers  ###############################
 
-        sdiv2.subheader('Outliers View - Under vs Over Indexed Customer Rates')
+        sdiv2.subheader('Outliers View:- Under vs Over Indexed Customer Rates')
         sdiv3.write("")
         st.divider()
 
@@ -392,37 +392,6 @@ if uploaded_file:
             else:
                 random_colour = {columns[i]: colours[random.randint(0, 8)]}
                 marker_color_map |= random_colour
-
-        # fig = go.Figure()
-        # for col, mc in marker_color_map.items():
-        #     fig.add_barpolar(
-        #         r= [12,11,10,9,8,7,6,5,4,3,2,1,0],
-        #         # r=selected_LineAmount[col],
-        #         customdata=list(zip(selected_LineAmount[[col, 'WorkdayCustomer_Name', 'WorkdayCustomer_Name']],
-        #                             [col] * len(selected_LineAmount))),
-        #         theta=[f'{n}<br> {v:,.0f}' for n, v in selected_LineAmount[['WorkdayCustomer_Name', "Total"]].values],
-        #         name=col, opacity=0.8, marker_color=mc)
-        #
-        # fig.update_layout(
-        #     title=f'Cost Centre Top 10 Customers',
-        #     title_font_size=20, title_x=0.1, title_y=0.97,
-        #     height=800, margin=dict(l=0, r=20),
-        #     template=None, font_size=11,
-        #     legend=dict(orientation='h', x=0.1, title='Key'),
-        #     polar=dict(
-        #         sector=[0, 360],
-        #         radialaxis=dict(showticklabels=False, ticks='',
-        #                         nticks=7, tickformat='.1%', ),
-        #         angularaxis=dict(showticklabels=True, ticks='', rotation=95)))
-        #
-        # # st.plotly_chart(fig, use_container_width=True)
-        # # st.divider()
-        #
-        # fig = px.scatter(selected_LineAmount, x="Total", y="Total",
-        #          size="Total", color="WorkdayCustomer_Name", title=f'Cost Centre Top 10 Customers',
-        #          hover_name="WorkdayCustomer_Name", log_x=True, size_max=60)
-        #
-        # st.plotly_chart(fig)
 
         #### Plotting HEAT MAP - tow Show Revenue and Profitabiliy #########################################
 
