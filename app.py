@@ -30,7 +30,7 @@ with st.spinner('Loading and Updating Report...🥱'):
             st.markdown(f'###### Report End Date  : {start_date.max()}')
             st.divider()
 
-            st.title("Customer Profitability")
+            st.title("Profitability")
             st.markdown(f'###### This is the Customer Pricing Model from Box:APAC Rev...')
             profitability_model_file = st.file_uploader('Upload Customer Pricing Model', type=['xlsx', 'xlsm', 'xlsb'])
 
@@ -393,33 +393,39 @@ if uploaded_file:
                 random_colour = {columns[i]: colours[random.randint(0, 8)]}
                 marker_color_map |= random_colour
 
-        fig = go.Figure()
-        for col, mc in marker_color_map.items():
-            fig.add_barpolar(
-                r=selected_LineAmount[col],
-                customdata=list(zip(selected_LineAmount[[col, 'WorkdayCustomer_Name', 'WorkdayCustomer_Name']],
-                                    [col] * len(selected_LineAmount))),
-                theta=[f'{n}<br> {v:,.0f}' for n, v in selected_LineAmount[['WorkdayCustomer_Name', "Total"]].values],
-                name=col, opacity=0.8, marker_color=mc)
-
-        fig.update_layout(
-            title=f'Cost Centre Top 10 Customers',
-            title_font_size=20, title_x=0.1, title_y=0.97,
-            height=800, margin=dict(l=0, r=20),
-            template=None, font_size=11,
-            legend=dict(orientation='h', x=0.1, title='Key'),
-            polar=dict(
-                sector=[0, 360],
-                radialaxis=dict(showticklabels=False, ticks='',
-                                nticks=7, tickformat='.1%', ),
-                angularaxis=dict(showticklabels=True, ticks='', rotation=95)))
-
-        st.plotly_chart(fig, use_container_width=True)
-        st.divider()
+        # fig = go.Figure()
+        # for col, mc in marker_color_map.items():
+        #     fig.add_barpolar(
+        #         r= [12,11,10,9,8,7,6,5,4,3,2,1,0],
+        #         # r=selected_LineAmount[col],
+        #         customdata=list(zip(selected_LineAmount[[col, 'WorkdayCustomer_Name', 'WorkdayCustomer_Name']],
+        #                             [col] * len(selected_LineAmount))),
+        #         theta=[f'{n}<br> {v:,.0f}' for n, v in selected_LineAmount[['WorkdayCustomer_Name', "Total"]].values],
+        #         name=col, opacity=0.8, marker_color=mc)
+        #
+        # fig.update_layout(
+        #     title=f'Cost Centre Top 10 Customers',
+        #     title_font_size=20, title_x=0.1, title_y=0.97,
+        #     height=800, margin=dict(l=0, r=20),
+        #     template=None, font_size=11,
+        #     legend=dict(orientation='h', x=0.1, title='Key'),
+        #     polar=dict(
+        #         sector=[0, 360],
+        #         radialaxis=dict(showticklabels=False, ticks='',
+        #                         nticks=7, tickformat='.1%', ),
+        #         angularaxis=dict(showticklabels=True, ticks='', rotation=95)))
+        #
+        # # st.plotly_chart(fig, use_container_width=True)
+        # # st.divider()
+        #
+        # fig = px.scatter(selected_LineAmount, x="Total", y="Total",
+        #          size="Total", color="WorkdayCustomer_Name", title=f'Cost Centre Top 10 Customers',
+        #          hover_name="WorkdayCustomer_Name", log_x=True, size_max=60)
+        #
+        # st.plotly_chart(fig)
 
 
         #### Plotting HEAT MAP - tow Show Revenue and Profitabiliy #########################################
-
 
         st.markdown('##### Avg Recurring Pallet Storage Billed')
         st.divider()
@@ -449,7 +455,7 @@ if uploaded_file:
         # sortedListed = selected_LineAmount.columns.sort_values(ascending=False)
         st.dataframe(selected_LineAmount[list(selected_LineAmount)], hide_index=True)
         st.divider()
-
+    try:
         with ProfitabilityTab:
 
 
@@ -596,6 +602,8 @@ if uploaded_file:
                 stats3.text(f"Rev/m²: \n {locale.format_string("%.0f", ( revenue_amount[selected_cost_centre_row_number]/site_sqm), grouping=True)}")
                 stats4.text(f"EBITDA/m²: \n {locale.format_string("%.0f",
                                                                    ( ebitda_amount/site_sqm), grouping=True)}")
+    except Exception as e:
+        st.markdown("###### Please Check if Customer Pricing Model has been Uploaded")
 
     with AboutTab:
         st.markdown(f'Check in with Arthur Rusike')

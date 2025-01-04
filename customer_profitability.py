@@ -34,7 +34,7 @@ def load_invoices_model(uploaded_file):
     invoice_rates = pd.read_excel(uploaded_file, sheet_name="InvoiceRates")
     invoice_rates["Calumo Description"] = invoice_rates.apply(sub_category_classification, axis=1)
     invoice_rates['formatted_date'] = pd.to_datetime(invoice_rates['InvoiceDate'])
-    invoice_rates.formatted_date = invoice_rates.formatted_date.dt.strftime('%d-%m-%Y')
+    invoice_rates.formatted_date = invoice_rates.formatted_date.dt.strftime('%Y-%m-%d')
     invoice_rates.sort_values("InvoiceNumber", inplace=True)
     return invoice_rates
 
