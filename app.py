@@ -1,4 +1,6 @@
+import io
 import random
+from io import BytesIO
 
 import numpy as np
 import pandas as pd
@@ -91,20 +93,19 @@ if uploaded_file:
 
             st.dataframe(selected_customer_pivot, use_container_width=True)
 
-            # # Convert DataFrame to Excel
-            # output = BytesIO()
-            # with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            #     selected_customer_pivot.to_excel(writer)
-            #     excel_data = output.getvalue()
-            #
-            # # Create a download button
-            # st.download_button(
-            #     label="Download Excel  ⤵️",
-            #     data=excel_data,
-            #     file_name='invoiced_data.xlsx',
-            #     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            #     key=1
-            # )
+            # Convert DataFrame to Excel
+            output = io.BytesIO()
+            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+                selected_customer_pivot.to_excel(writer)
+
+            # Create a download button
+            st.download_button(
+                label="Download Excel  ⤵️",
+                data=output,
+                file_name='invoiced_data.xlsx',
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                key=1
+            )
 
             kpi1, kpi2, kpi3, = st.columns(3)
 
@@ -437,21 +438,21 @@ if uploaded_file:
         download_data = selected_LineAmount[list(selected_LineAmount)]
         st.dataframe(download_data, hide_index=True)
 
-        # # Convert DataFrame to Excel
-        # output2 = BytesIO()
-        # with pd.ExcelWriter(output2, engine='xlsxwriter') as writer:
-        #     download_data.to_excel(writer, index=False)
-        #     customer_excel_data = output2.getvalue()
-        #
-        # # Create a download button
-        # st.download_button(
-        #     label="Download file ⤵️",
-        #     data=customer_excel_data,
-        #     file_name='customer_revenue.xlsx',
-        #     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        #     key=2,
-        #
-        # )
+        # Convert DataFrame to Excel
+
+        output2 = io.BytesIO()
+        with pd.ExcelWriter(output2, engine='xlsxwriter') as writer:
+            download_data.to_excel(writer, sheet_name='export_data', index=False)
+
+
+        # Create a download button
+        st.download_button(
+            label="Download file️",
+            data=output2,
+            file_name='customer_revenue.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            key=2,
+        )
 
     st.divider()
     try:
