@@ -434,8 +434,12 @@ if uploaded_file:
         st.plotly_chart(fig, filename='Chart.html')
         st.divider()
 
-        # sortedListed = selected_LineAmount.columns.sort_values(ascending=False)
-        download_data = selected_LineAmount[list(selected_LineAmount)]
+        selected_LineAmount.rename(
+            columns={0: "Other"},
+            inplace=True)
+
+        sortedListed = selected_LineAmount.columns.sort_values(ascending=False)
+        download_data = selected_LineAmount[list(sortedListed)]
         st.dataframe(download_data, hide_index=True)
 
         # Convert DataFrame to Excel
