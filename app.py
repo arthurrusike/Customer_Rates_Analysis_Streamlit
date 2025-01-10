@@ -447,7 +447,7 @@ if uploaded_file:
 
         # Create a download button
         st.download_button(
-            label="Download file️",
+            label="Download file️ ⤵️",
             data=output2,
             file_name='customer_revenue.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
