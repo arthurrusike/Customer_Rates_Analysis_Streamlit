@@ -95,7 +95,7 @@ if uploaded_file:
 
             # Convert DataFrame to Excel
             output = io.BytesIO()
-            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            with pd.ExcelWriter(output) as writer:
                 selected_customer_pivot.to_excel(writer)
 
             # Create a download button
@@ -441,7 +441,7 @@ if uploaded_file:
         # Convert DataFrame to Excel
 
         output2 = io.BytesIO()
-        with pd.ExcelWriter(output2, engine='xlsxwriter') as writer:
+        with pd.ExcelWriter(output2 ) as writer:
             download_data.to_excel(writer, sheet_name='export_data', index=False)
 
 
